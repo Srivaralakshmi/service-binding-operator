@@ -1,0 +1,42 @@
+== Deploy the application
+
+In this section, we are going to deploy the application on our
+kubernetes cluster. For that, we will use a deployment configuration including a `Deployment` and a `Service` resources:
+
++++ <details><summary> +++
+`Deployment` to run the actual application instance
++++ </summary><div> +++
+[source,yaml]
+----
+include::attachment$petclinic-deployment.yaml[tag=app-deployment]
+----
++++ </div></details> +++
+
++++ <details><summary> +++
+`Service` to provide means to access to the application UI
++++ </summary><div> +++
+[source,yaml]
+----
+include::attachment$petclinic-deployment.yaml[tag=app-service]
+----
++++ </div></details> +++
+
+For a convenience, you can run this command to create the application resources:
+[source,bash,subs="attributes,macros"]
+kubectl apply -f link:{attachmentsdir}/petclinic-deployment.yaml[pass:a[{site-url}/{page-component-name}/{page-module}/{attachmentsdir}/petclinic-deployment.yaml]] -n {quickstart-namespace}
+
+At this stage, the application is not yet connected to the database and the pod would fail to start because of that:
+
+[source,bash,subs="attributes"]
+----
+kubectl get pods -n {quickstart-namespace}
+----
+
+[source]
+----
+NAME                                           READY   STATUS             RESTARTS     AGE
+spring-petclinic-5d47b7dbcd-7zd8v              0/1     CrashLoopBackOff   1 (7s ago)   28s
+----
+
+Now, we are going to see how you can use {servicebinding-title} to easily
+connect the application to the database.

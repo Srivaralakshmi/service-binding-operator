@@ -1,0 +1,12 @@
+By using service bindings, developers are able to more easily leverage
+the services available to them on a Kubernetes cluster. This method
+provides consistency accross different services and is repeatable for
+the developers. By remove the usual manual and error prone
+configuration, they benefit from a unified way to do
+application-to-service linkage.
+
+You can continue to learn more about Service Binding by:
+
+* xref:creating-service-bindings:creating-service-binding.adoc[Creating Service Binding]
+* xref:using-projected-bindings:using-projected-bindings.adoc[Using Projected Bindings]
+* xref:exposing-binding-data:intro-expose-binding.adoc[Exposing Binding Data]

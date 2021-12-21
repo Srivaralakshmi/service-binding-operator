@@ -1,0 +1,75 @@
+== Create a PostgreSQL database instance
+
+The application is going to use a PostgreSQL database instance. 
+
+To create a database instance, you need to create the following resources:
+
++++ <details><summary> +++
+`Deployment` to run the actual database instance
++++ </summary><div> +++
+[source,yaml]
+----
+include::attachment$postgresql-deployment.yaml[tag=db-deployment]
+----
++++ </div></details> +++
+
++++ <details><summary> +++
+`Secret` to store database credentials
++++ </summary><div> +++
+[source,yaml]
+----
+include::attachment$postgresql-deployment.yaml[tag=db-secret]
+----
++++ </div></details> +++
+
++++ <details><summary> +++
+`Service` to provide means to access to the database
++++ </summary><div> +++
+[source,yaml]
+----
+include::attachment$postgresql-deployment.yaml[tag=db-service]
+----
++++ </div></details> +++
+
+For convenience, you can run this command to create the database\'s resources:
+[source,bash,subs="attributes,macros"]
+----
+kubectl apply -f link:{attachmentsdir}/postgresql-deployment.yaml[pass:a[{site-url}/{page-component-name}/{page-module}/{attachmentsdir}/postgresql-deployment.yaml]] -n {quickstart-namespace}
+----
+
+To verify that the database instance is up and running you can check the respective pod in `{quickstart-namespace}` namespace and see it `Running`:
+[source,bash,subs="attributes"]
+----
+kubectl get pods -n {quickstart-namespace}
+----
+----
+NAME                                           READY   STATUS    RESTARTS   AGE
+spring-petclinic-postgresql-6db5594876-4556g   1/1     Running   0          16m
+----
+
+The database has been created and is empty at this stage. Its schema and a sample data set will be initialized by the application.
+
+IMPORTANT: Notice that the database\'s `Deployment` resource has couple of annotations set in the `.metadata.annotations` section.
+
+[source,yaml]
+----
+include::attachment$postgresql-deployment.yaml[tag=db-annotations,indent=0]
+----
+
+You can show them by running the following command:
+[source,bash,subs="attributes"]
+----
+kubectl annotate --list deployment spring-petclinic-postgresql -n {quickstart-namespace} | grep '^service.binding'
+----
+
+Those annotations are
+necessary to be set on the database\'s `Deployment` resource to make it a bindable service, in other words to expose the binding data (such as database connection information or credentials) in a way that can be detected by {servicebinding-title}]. In those annotations the `type` of service is specified, the connection information as `host` and `port`, as well as a reference to the secret containing the database credentials.
+
+To learn more about service binding annotations you can find more information at xref:exposing-binding-data:adding-annotation.adoc[] section.
+
+NOTE: There are many ways to make a resource a bindable service based on the type of the resource. More details on various ways to expose the binding data can be found in xref:exposing-binding-data:intro-expose-binding.adoc[Exposing Binding Data] section.
+
+NOTE: There are operator-backed services that {servicebinding-title} automatically recognizes as bindable services. To learn more about those operators loot at xref:exposing-binding-data:supported-operators.adoc[].
+
+We have now finished setup of the database for the application. We
+are ready to deploy the application and connect it to the database.

@@ -1,4 +1,4 @@
-= Connecting PetClinic application to PostgreSQL database
+= Connecting PetClinic application to operator-backed PostgreSQL database
 :quickstart-namespace: my-petclinic
 
 The goal of this quick start guide is to:
@@ -21,7 +21,7 @@ service, like a database and the application.
 To illustrate what we are going to do, here is a visual representation
 of the application we are going to setup.
 
-image:postgresql-spring-boot.png[postgresql-spring-boot]
+image:pgcluster-spring-boot.png[pgcluster-spring-boot]
 
 In this configuration, we leverage the {servicebinding-title}, to
 collect the binding data from the PostgreSQL database and project them
@@ -43,22 +43,21 @@ to the database with Service Binding]
 include::partial$common-prerequisities.adoc[]
 
 [#create-a-postgresql-database-instance]
-include::partial$deploy-db-postgresql.adoc[]
+include::partial$deploy-db-pgcluster.adoc[]
 
 [#deploy-the-application]
 include::partial$deploy-application.adoc[]
 
 [#connect-the-application-to-the-database]
-include::partial$connect-petclinic-postgresql.adoc[]
+include::partial$connect-petclinic-pgcluster.adoc[]
 
 == Conclusion
+In this sample, we setup an operator-backed database and connected it to an application
+using the {servicebinding-title} to collect the connection metadata
+and expose them to the application.
 
-In this sample, we setup a database in a form of a plain `Deployment` resource
-and connected it to an application using the {servicebinding-title} to collect
-the connection metadata and expose them to the application.
-
-To see how connect the application to an operator-backed database, you can look at
-xref:getting-started:petclinic-pgcluster.adoc[]
+To see how connect the application to a database deployed via plain `Deployment`, you can look at
+xref:getting-started:quick-start.adoc[]
 
 == Next Steps
 

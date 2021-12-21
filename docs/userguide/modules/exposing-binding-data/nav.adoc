@@ -1,4 +1,4 @@
-* Expose Binding Data
+* Exposing Binding Data
 ** xref:intro-expose-binding.adoc[]
 ** xref:provisioned-service.adoc[]
 ** xref:direct-secret-reference.adoc[]
@@ -6,3 +6,4 @@
 ** xref:olm-descriptors.adoc[]
 ** xref:detect-bindings.adoc[]
 ** xref:rbac-requirements.adoc[]
+** xref:supported-operators.adoc[]

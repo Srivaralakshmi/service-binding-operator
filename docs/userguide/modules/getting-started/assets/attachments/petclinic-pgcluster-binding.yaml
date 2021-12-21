@@ -3,13 +3,13 @@ apiVersion: binding.operators.coreos.com/v1alpha1
 kind: ServiceBinding
 metadata:
   name:
-    spring-petclinic-postgresql
+    spring-petclinic-pgcluster
 spec:
   services:
-    - group: apps
-      version: v1
-      kind: Deployment
-      name: spring-petclinic-postgresql
+    - group: postgres-operator.crunchydata.com
+      version: v1beta1
+      kind: PostgresCluster
+      name: hippo
   application:
     name: spring-petclinic
     group: apps

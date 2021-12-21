@@ -1,0 +1,18 @@
+== Prerequisites
+
+In order to follow the quick start, you\'ll need the following tools
+installed and configured:
+
+* Kubernetes cluster
++
+NOTE: You can use
+https://minikube.sigs.k8s.io/[minikube] or
+https://kind.sigs.k8s.io/[kind], locally
+* https://kubernetes.io/docs/tasks/tools/#kubectl[kubectl]
+* Additionally, our service and application need a namespace to live in. To create one called `{quickstart-namespace}` run the following command: 
++
+[source,bash,subs="attributes"]
+----
+kubectl create namespace {quickstart-namespace}
+----
+* xref:installing-service-binding.adoc[{servicebinding-title}]

@@ -1,0 +1,26 @@
+= Known bindable operator-backed services
+
+The {servicebinding-title} can automatically detect and bind to services
+created by a limited selection of operators. These operators do not support
+binding directly. Instead, the {servicebinding-title} is able to detect and
+configure the operator's CRDs so that they become bindable.
+
+The long-term intention is to contribute upstream support for service binding
+and remove the operators that gain native support for service bindings. 
+
+The operators that currently fall in this category are:
+
+* link:https://operatorhub.io/operator/redis-operator[OpsTree Redis]:
+bindable with `Redis.redis.redis.opstreelabs.in/v1beta1` services
+
+* link:https://operatorhub.io/operator/postgresql[CrunchyData Postgres]: bindable with `PostgresCluster.postgres-operator.crunchydata.com/v1beta1` services
+
+* link:https://operatorhub.io/operator/cloud-native-postgresql[Cloud Native PostgreSQL]: bindable with `Cluster.postgresql.k8s.enterprisedb.io/v1` services
+
+* link:https://operatorhub.io/operator/percona-xtradb-cluster-operator[Percona XtraDB Cluster]: bindable with `PerconaXtraDBCluster.pxc.percona.com/v1-8-0` and `v1-9-0` services
+
+* link:https://operatorhub.io/operator/percona-server-mongodb-operator[Percona MongoDB]: bindable with `PerconaServerMongoDB.psmdb.percona.com/v1-9-0` and `v1-10-0` services
++
+NOTE: Provides administrative access to the cluster by default
+
+* link:https://github.com/rabbitmq/cluster-operator[RabbitMQ Cluster]: bindable with `RabbitmqCluster.rabbitmq.com/v1beta1` services

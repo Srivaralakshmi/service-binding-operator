@@ -21,14 +21,6 @@ endif
 deploy-database:
 	kubectl apply -f db-deployment.yaml -n $(NAMESPACE)
 
-.PHONY: annotate-database
-annotate-database:
-	kubectl annotate --overwrite=true deployment -n ${NAMESPACE} spring-petclinic-postgresql \
-	service.binding/type="postgresql" \
-    service.binding/host="path={.metadata.name}.{.metadata.namespace}" \
-    service.binding/port="path={.spec.template.spec.containers[0].ports[0].containerPort}" \
-    service.binding="path={.spec.template.spec.volumes[0].secret.secretName},objectType=Secret"
-
 .PHONY: build-app
 build-app:
 	docker build -f Dockerfile.app -t $(PETCLINIC_APP_IMAGE) .

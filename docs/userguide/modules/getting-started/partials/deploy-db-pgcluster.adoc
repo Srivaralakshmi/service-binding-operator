@@ -1,0 +1,51 @@
+== Create a PostgreSQL database instance
+
+The application is going to use to a PostgreSQL database backend which
+can be setup using the `v5` channel of
+https://operatorhub.io/operator/postgresql[Crunchy PostgreSQL operator
+from OperatorHub.io]. We just need to make sure that the operator is
+availabe in our `my-postgresql` namespace.
+
+The installation of the operator doesn’t create a database instance
+itself, so we need to create one.
+
+To create a database instance, you need to create custom resource
+`PostgresCluster` and that will trigger the operator reconciliation. For
+convenience, run this command to create `PostgresCluster` custom
+resource:
+
++++ <details><summary> +++
+`PostgresCluster` resource to run database instance
++++ </summary><div> +++
+[source,yaml]
+----
+include::attachment$pgcluster-deployment.yaml[tag=db-deployment]
+----
++++ </div></details> +++
+
+For convenience, you can run this command to create the database\'s resources:
+[source,bash,subs="attributes,macros"]
+----
+kubectl apply -f link:{attachmentsdir}/pgcluster-deployment.yaml[pass:a[{site-url}/{page-component-name}/{page-module}/{attachmentsdir}/pgcluster-deployment.yaml]] -n {quickstart-namespace}
+----
+
+Once the database is created, we need to ensure all the pods in
+`my-postgresql` namespace are running (it will take few minutes):
+[source,bash]
+----
+kubectl get pods -n {quickstart-namespace}
+----
+
+You should see output something like this:
+[source,terminal]
+....
+NAME                               READY   STATUS      RESTARTS   AGE
+hippo-backup-jxv6--1-smqkz         0/1     Completed   0          42s
+hippo-instance1-ml48-0             3/3     Running     0          119s
+hippo-pgbouncer-56db454d6b-782hg   2/2     Running     0          118s
+hippo-repo-host-0                  1/1     Running     0          118s
+....
+
+We have now finished to configure the database for the application. We
+are ready to deploy the sample application and connect it to the
+database.

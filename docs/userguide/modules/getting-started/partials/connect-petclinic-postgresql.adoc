@@ -1,0 +1,91 @@
+== Connect the application to the database
+
+Suppose the {servicebinding-title} is not present. In that case, the
+application\'s admin needs to extract all the configuration details and
+create a Secret resource and expose it to the application through volume
+mount in Kubernetes. The steps would be something like this:
+
+. Identify the required values for connecting the application to the
+database
+. Locate the resources where the values are present
+. Take the values from different resources and create a Secret resource
+. Mount the Secret resource into the application
+. Depending on the application requirement the values should be exposed
+as env var or file.
+
+In this quick start, we are going to leverage {servicebinding-title} as a way
+to easily and safely connect the application to the database service. In
+order to do that, we\'ll need to create a `ServiceBinding` resource which
+will trigger the {servicebinding-title} to project the binding data
+into the application.
+
+=== Create the `ServiceBinding` resource to project the binding data:
+
+The `.spec` has two sections. The first is a list of service
+resources (`.spec.services`), and the second one is the application
+(`.spec.application`). The services resources points to the database\'s
+service resources. How the values are exposed from service resources are
+explained xref:exposing-binding-data:intro-expose-binding.adoc[Exposing Binding Data]
+section. The application points to a `Deployment`
+or any resource that is PodSpec compatible.
+
++++ <details><summary> +++
+`ServiceBinding` resource to project the binding data 
++++ </summary><div> +++
+[source,yaml]
+----
+include::attachment$petclinic-postgresql-binding.yaml[tag=service-binding]
+----
++++ </div></details> +++
+
+For simplicity, you can run the following command in shell to create the
+resource:
+
+[source,bash,subs="attributes,macros"]
+----
+kubectl apply -f link:{attachmentsdir}/petclinic-postgresql-binding.yaml[pass:a[{site-url}/{page-component-name}/{page-module}/{attachmentsdir}/petclinic-postgresql-binding.yaml]] -n {quickstart-namespace}
+----
+
+To check if the binding was successful you can check the binding
+resource status conditions by running the following command:
+
+[source,bash,subs="attributes,macros"]
+----
+kubectl get servicebindings -n {quickstart-namespace}
+----
+
+You should see the output similar to the following:
+[source]
+----
+NAME                          READY   REASON              AGE
+spring-petclinic-postgresql   True    ApplicationsBound   28s
+----
+
+To learn more about creating service bindings, you can find more
+information on the following xref:creating-service-bindings:creating-service-binding.adoc[document]
+
+By creating this `ServiceBinding` resource, we now have values from the
+database\'s binding data projected into the application container as
+files (that\'s the default behavior, but you can also project environment
+variables if you prefer). If you check under
+`/bindings/spring-petclinic-postgresql` directory you\'ll see all the values
+from the secret resource projected there. In the above example, you\'ll
+find `username` and `password`. And the values pointed out through the
+annotation are also projected which includes `database`, `host`, and
+`port`. Finally `type` is also projected which is required for
+connectity.. The application looks for `SERVICE_BINDING_ROOT` env var to
+find the location of `/bindings` directory. The Spring Boot application
+used here is built using
+https://github.com/spring-cloud/spring-cloud-bindings[Spring Cloud
+Bindings] and it looks for `SERVICE_BINDING_ROOT` to get the projected
+binding data. See the using projected binding data section about how the
+values can be used from the application.
+
+To verify that binding was successful let\'s setup the port forwarding from the application port so we
+can access it from our local environment:
+[source,bash,subs="attributes"]
+----
+kubectl port-forward --address 0.0.0.0 svc/spring-petclinic 8080:80 -n {quickstart-namespace}
+----
+
+You should be able to open http://localhost:8080 and access the application\'s web UI and use it normally.
